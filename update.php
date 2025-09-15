@@ -1,49 +1,73 @@
 <?php
 include("dbconnect.php");
-$id=intval($_GET['updateid']);
-$sql="select *from reg where id=$id";
-$result=mysqli_query($conn,$sql);
-$rows=mysqli_fetch_assoc($result);
+$id = intval($_GET['updateid']);
 
-if(isset($_POST['submit'])){
-	$name=$_POST['name'];
-	$email=$_POST['email'];
-	$phone=$_POST['phone'];
-	$address=$_POST['address'];
+// Fetch existing data
+$sql = "SELECT * FROM reg WHERE id=$id";
+$result = mysqli_query($conn, $sql);
+$rows = mysqli_fetch_assoc($result);
 
-	
-	$sql="update reg set name='$name',email='$email',phone='$phone',address='$address' where id='$id'";
-	$result=mysqli_query($conn,$sql);
+if (isset($_POST['submit'])) {
+    $name    = $_POST['name'];
+    $email   = $_POST['email'];
+    $phone   = $_POST['phone'];
+    $address = $_POST['address'];
 
-	if($result){
-		header('location:index.php');
-	}
-	else{
-		die(mysqli_error($conn));
-	}
+    // Image file
+    $image     = $_FILES['image']['name'];
+    $tmp_name  = $_FILES['image']['tmp_name'];
+    $folder    = "uploads/" . $image;
+
+    if (!empty($image)) {
+        // New image uploaded
+        move_uploaded_file($tmp_name, $folder);
+        $sql = "UPDATE reg SET name='$name', email='$email', phone='$phone', address='$address', image='$image' WHERE id='$id'";
+    } else {
+        // Keep old image
+        $sql = "UPDATE reg SET name='$name', email='$email', phone='$phone', address='$address' WHERE id='$id'";
+    }
+
+    $result = mysqli_query($conn, $sql);
+
+    if ($result) {
+        header('location:index.php');
+    } else {
+        die(mysqli_error($conn));
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>update</title>
+    <title>Update</title>
 </head>
 
 <body>
-    <form method="POST">
-        <label>Name:</label><input type="text" name="name" id="name" placeholder="<?php echo $rows['name'];?>">
-        <label>email:</label><input type="text" name="email" id="email" value="<?php echo $rows['email'];?>">
-        <label>phone:</label><input type="text" name="phone" id="phone" value="<?php echo $rows['phone'];?>">
-        <label>address:</label><input type="text" name="address" id="address" value="<?php echo $rows['address'];?>">
-       <!--  password:<input type="text" name="password" id="password">
-        cpassword:<input type="text" name="cpassword" id="cpassword"> -->
+    <form method="POST" enctype="multipart/form-data">
+        <label>Name:</label>
+        <input type="text" name="name" value="<?php echo $rows['name']; ?>"><br><br>
 
-        <button type="submit" name="submit">submit</button>
+        <label>Email:</label>
+        <input type="text" name="email" value="<?php echo $rows['email']; ?>"><br><br>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" value="<?php echo $rows['phone']; ?>"><br><br>
+
+        <label>Address:</label>
+        <input type="text" name="address" value="<?php echo $rows['address']; ?>"><br><br>
+
+        <label>Current Image:</label><br>
+        <img src="uploads/<?php echo $rows['image']; ?>" width="100"><br><br>
+
+        <label>Upload New Image:</label>
+        <input type="file" name="image"><br><br>
+
+        <button type="submit" name="submit">Update</button>
     </form>
-
 </body>
 
 </html>
