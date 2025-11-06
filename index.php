@@ -25,18 +25,26 @@ $result=mysqli_query($conn,$sql);
             <th>address</th>
 
         </tr>
-            <?php while($rows=mysqli_fetch_assoc($result)){?>
+             <?php while($rows = mysqli_fetch_assoc($result)) { ?>
             <tr>
-                <td><?php echo $rows['id'];?></td>
-                <td><?php echo $rows['name'];?></td>
-                <td><?php echo $rows['email'];?></td>
-                <td><?php echo $rows['phone'];?></td>
-                <td><?php echo $rows['address'];?></td>
-                <td><button><a href="update.php?updateid=<?php echo $rows['id']; ?>">update</a></button>
-                <button><a href="delete.php?deleteid=<?php echo $rows['id']; ?>">delete</a></button></td>
-                      
+                <td><?php echo $rows['id']; ?></td>
+                <td>
+                    <?php if (!empty($rows['image'])) { ?>
+                        <img src="uploads/<?php echo $rows['image']; ?>" alt="User Image">
+                    <?php } else { ?>
+                        <img src="uploads/default.png" alt="No Image">
+                    <?php } ?>
+                </td>
+                <td><?php echo $rows['name']; ?></td>
+                <td><?php echo $rows['email']; ?></td>
+                <td><?php echo $rows['phone']; ?></td>
+                <td><?php echo $rows['address']; ?></td>
+                <td>
+                    <button><a href="update.php?updateid=<?php echo $rows['id']; ?>">Update</a></button>
+                    <button><a href="delete.php?deleteid=<?php echo $rows['id']; ?>">Delete</a></button>
+                </td>
             </tr>
-        <?php };?>
+        <?php } ?>
     </table>
 
 </body>

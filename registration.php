@@ -12,6 +12,7 @@ if (isset($_POST['submit'])) {
     $tempname = $_FILES['image']['tmp_name'];
     $folder   = "uploads/" . $image;  // Folder to store uploaded images
 
+
     // Check empty fields
     if (empty($name) || empty($email) || empty($phone) || empty($address) || empty($password) || empty($cpassword) || empty($image)) {
         echo "<script>alert('All fields are required');</script>";
