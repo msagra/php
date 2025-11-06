@@ -32,7 +32,8 @@ $result=mysqli_query($conn,$sql);
                 <td><?php echo $rows['email'];?></td>
                 <td><?php echo $rows['phone'];?></td>
                 <td><?php echo $rows['address'];?></td>
-                <td><button><a href="update.php?updateid=<?php echo $rows['id']; ?>">update</a></button><button><a href="delete.php?deleteid=<?php echo $rows['id']; ?>">delete</a></button></td>
+                <td><button><a href="update.php?updateid=<?php echo $rows['id']; ?>">update</a></button>
+                <button><a href="delete.php?deleteid=<?php echo $rows['id']; ?>">delete</a></button></td>
                       
             </tr>
         <?php };?>
